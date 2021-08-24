@@ -2,123 +2,96 @@
 
 namespace Source\Core;
 
-use PDO;
-use Source\Core\Connection;
-use stdClass;
+use CoffeeCode\DataLayer\Connect;
+use CoffeeCode\DataLayer\DataLayer;
+use Exception;
 
-class Model
+abstract class Model extends DataLayer
 {
-    protected static $table;
-    protected static $columns;
-    protected $values = [];
-
-    public function __construct($table, $arr, $primary = '_id')
-    {
-        $this->table = $table;
-        $this->primary = $primary;
-    }
-
-    public function __get($name)
-    {
-        $method = $this->toCamelCase($name);
-        if (method_exists($this, $method)) {
-            return $this->$method();
-        }
-
-        if (method_exists($this, $name)) {
-            return $this->$name();
-        }
-
-        return ($this->data->$name ?? null);
-    }
-
-    public function __set($name, $value)
-    {
-        if (empty($this->data)) {
-            $this->data = new stdClass();
-        }
-
-        $this->data->$name = $value;
+    public function __construct(string $entity, array $required, string $primary = 'id', bool $timestamps = true) {
+        parent::__construct($entity, $required, $primary, $timestamps);
     }
 
     
 
-    public function fail()
-    {
-        return $this->fail();
-    }
-
-    public function find(?string $terms = null, ?string $params = null, string $columns = '*'): Model
-    {
-        if ($terms) {
-            $this->statement = "SELECT {$columns} FROM {$this->table} WHERE {$terms}";
-            parse_str($params, $this->params);
-            return $this;
-        }
-        $this->statement = "SELECT {$columns} FROM {$this->table}";
-        return $this;
-    }
-
-    public function findById(int $id, string $columns = '*'): ?Model
-    {
-        return $this->statement = $this->find("{$this->primary} = :id", "id={$id}", $columns)->fetch();
-    }
-
-    public function group(string $column): ?Model
-    {
-        $this->group = " GROUP BY {$column}";
-        return $this;
-    }
-
-    public function order(string $columnOrder): ?Model
-    {
-        $this->order = " ORDER BY {$columnOrder}";
-        return $this;
-    }
-
-    public function limit(int $limit): ?Model
-    {
-        $this->limit = " LIMIT {$limit}";
-        return $this;
-    }
-
-    public function offset(int $offset): ?Model
-    {
-        $this->offset = " OFFSET {$offset}";
-        return $this;
-    }
-
-    public function fetch(bool $all = false)
+    /**
+     * @param bool $all
+     * @return array|mixed|null
+     */
+    public function fetch(bool $all = false, string $mode = null)
     {
         try {
-            $stmt = Connection::conn()->prepare(
-                $this->statement );
-                $stmt->execute($this->params);
-            // $stmt = Connection::conn()->prepare(
-            //     'SELECT * FROM teste WHERE title LIKE :title'
-            // );
-            // $stmt->execute([':title' => 'valor1']);
+            $stmt = Connect::getInstance()->prepare($this->statement . $this->group . $this->order . $this->limit . $this->offset);
+            $stmt->execute($this->params);
 
             if (!$stmt->rowCount()) {
                 return null;
             }
 
             if ($all) {
-                return $stmt->fetchAll(PDO::FETCH_CLASS, static::class);
+                if(!$mode){
+                    return $stmt->fetchAll(\PDO::FETCH_CLASS, static::class);
+                }
+                return $stmt->fetchAll(\PDO::FETCH_ASSOC);
             }
-
-            // return $this->statement;
-            return $stmt->fetchObject(static::class);
+            if(!$mode){
+                return $stmt->fetchObject(static::class);
+            }
+            return $stmt->fetch(\PDO::FETCH_ASSOC);
         } catch (\PDOException $exception) {
             $this->fail = $exception;
             return null;
         }
     }
 
-    protected function toCamelCase(string $string): string
+    /**
+     * fetchJson
+     *
+     * @param bool $all 
+     * @return void
+     */
+    public function fetchJson(bool $all)
     {
-        $camelCase = str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
-        $camelCase[0] = strtolower($camelCase[0]);
-        return $camelCase;
+        return $this->fetch($all, 'json');
+    }
+
+    /**
+     * @return bool
+     */
+    public function save(): bool
+    {
+        $primary = $this->primary;
+        $id = null;
+
+        try {
+            if (!$this->required()) {
+                throw new Exception("Preencha os campos necessários");
+            }
+
+            /** Update */
+            if (!empty($this->data->$primary)) {
+                $id = $this->data->$primary;
+                $this->update($this->safe(), "{$this->primary} = :id", "id={$id}");
+            }
+
+            /** Create */
+            if (empty($this->data->$primary)) {
+                
+                $this->data->$primary = "sd3f5asd3f541as3d";
+                // $this->data->$primary = '23421';
+                $id = $this->create((array)$this->data);
+                echo $this->data->$primary;
+            }
+
+            if (!$id) {
+                return false;
+            }
+
+            $this->data = $this->find("{$this->primary} = :id", "id={$id}")->data();
+            return true;
+        } catch (Exception $exception) {
+            $this->fail = $exception;
+            return false;
+        }
     }
 }
