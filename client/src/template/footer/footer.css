@@ -1,0 +1,7 @@
+footer.footer {
+    grid-area: footer;
+    background-color: lightpink;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

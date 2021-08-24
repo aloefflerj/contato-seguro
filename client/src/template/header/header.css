@@ -1,0 +1,5 @@
+header.header {
+    grid-area: header;
+    background-color: coral;
+    display: flex;
+}

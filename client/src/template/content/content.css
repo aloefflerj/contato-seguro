@@ -1,0 +1,6 @@
+main.content {
+    grid-area: content;
+    display: flex;
+    background-color: lightgreen;
+    display: flex;
+}

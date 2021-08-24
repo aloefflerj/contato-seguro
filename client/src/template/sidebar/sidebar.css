@@ -1,0 +1,5 @@
+aside.sidebar {
+    grid-area: sidebar;
+    display: flex;
+    background-color: lightseagreen;
+}
