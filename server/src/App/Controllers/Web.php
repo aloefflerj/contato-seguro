@@ -18,15 +18,13 @@ class Web
     {
 
         $teste = new Teste();
-        $teste->title = "testando";
-        $teste->save();
+        $result = $teste->register("outro teste");
         // $result = $teste->find("id=:id", "id=edfgsdg")->fetch(true, 'json');
         if(!$teste->save()){
             echo $teste->fail()->getMessage();
         }
-        $result = $teste->find()->fetch(true);
-
-        $res->getBody()->write('<pre>', var_dump($result), '</pre>');
+        // $result = $teste->find()->fetch(true);
+        $res->getBody()->write(json_encode($result->fetchJson('')));
         return $res;
     }
 }

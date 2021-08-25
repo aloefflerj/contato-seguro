@@ -4,15 +4,12 @@ namespace Source\Core;
 
 use CoffeeCode\DataLayer\Connect;
 use CoffeeCode\DataLayer\DataLayer;
-use Exception;
 
 abstract class Model extends DataLayer
 {
     public function __construct(string $entity, array $required, string $primary = 'id', bool $timestamps = true) {
         parent::__construct($entity, $required, $primary, $timestamps);
     }
-
-    
 
     /**
      * @param bool $all
@@ -55,43 +52,43 @@ abstract class Model extends DataLayer
         return $this->fetch($all, 'json');
     }
 
-    /**
-     * @return bool
-     */
-    public function save(): bool
-    {
-        $primary = $this->primary;
-        $id = null;
+    // /**
+    //  * @return bool
+    //  */
+    // public function save(): bool
+    // {
+    //     $primary = $this->primary;
+    //     $id = null;
 
-        try {
-            if (!$this->required()) {
-                throw new Exception("Preencha os campos necessários");
-            }
+    //     try {
+    //         if (!$this->required()) {
+    //             throw new Exception("Preencha os campos necessários");
+    //         }
 
-            /** Update */
-            if (!empty($this->data->$primary)) {
-                $id = $this->data->$primary;
-                $this->update($this->safe(), "{$this->primary} = :id", "id={$id}");
-            }
+    //         /** Update */
+    //         if (!empty($this->data->$primary)) {
+    //             $id = $this->data->$primary;
+    //             $this->update($this->safe(), "{$this->primary} = :id", "id={$id}");
+    //         }
 
-            /** Create */
-            if (empty($this->data->$primary)) {
-                
-                $this->data->$primary = "sd3f5asd3f541as3d";
-                // $this->data->$primary = '23421';
-                $id = $this->create((array)$this->data);
-                echo $this->data->$primary;
-            }
+    //         /** Create */
+    //         if (empty($this->data->$primary)) {
+    //             // echo '<pre>', var_dump($this->primary) . '</pre><br><hr>';
+    //             $this->data->$primary = md5(uniqid(mt_rand(), true));
+    //             // $this->data->$primary = '23421';
+    //             $id = $this->create((array)$this->data);
+    //             // echo $this->data->$primary;
+    //         }
 
-            if (!$id) {
-                return false;
-            }
+    //         if (!$id) {
+    //             return false;
+    //         }
 
-            $this->data = $this->find("{$this->primary} = :id", "id={$id}")->data();
-            return true;
-        } catch (Exception $exception) {
-            $this->fail = $exception;
-            return false;
-        }
-    }
+    //         $this->data = $this->find("{$this->data->$primary} = :id", "id={$id}")->data();
+    //         return true;
+    //     } catch (Exception $exception) {
+    //         $this->fail = $exception;
+    //         return false;
+    //     }
+    // }
 }
