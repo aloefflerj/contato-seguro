@@ -1,6 +1,7 @@
 {
-    "name": "aloefflerj/rpg-todo-server",
-    "description": "An rpg with real live xp",
+    "name": "aloefflerj/contato-seguro",
+    "description": "Teste desenvolvedor fullstack contato seguro",
+    "version": "0.1.0",
     "type": "project",
     "require": {
         "slim/slim": "4.8.*",

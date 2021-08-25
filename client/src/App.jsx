@@ -44,6 +44,13 @@ class App extends Component {
                 </Sidebar>
                 <Content>
                     <h3>Aqui fica imagem do char</h3>
+                    <form action={baseUrl} method="post">
+                        
+                        <label htmlFor="title">Título</label>
+                        <input type="text" name="title" id="title" />
+
+                        <button>Manda</button>
+                    </form>
                 </Content>
                 <Footer>
                     <p>Criado com amor por Anderson</p>

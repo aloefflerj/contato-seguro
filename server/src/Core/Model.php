@@ -4,6 +4,7 @@ namespace Source\Core;
 
 use CoffeeCode\DataLayer\Connect;
 use CoffeeCode\DataLayer\DataLayer;
+use JsonSerializable;
 
 abstract class Model extends DataLayer
 {
@@ -15,7 +16,7 @@ abstract class Model extends DataLayer
      * @param bool $all
      * @return array|mixed|null
      */
-    public function fetch(bool $all = false, string $mode = null)
+    public function fetch(bool $all = false, string $json = null)
     {
         try {
             $stmt = Connect::getInstance()->prepare($this->statement . $this->group . $this->order . $this->limit . $this->offset);
@@ -26,15 +27,15 @@ abstract class Model extends DataLayer
             }
 
             if ($all) {
-                if(!$mode){
+                if(!$json){
                     return $stmt->fetchAll(\PDO::FETCH_CLASS, static::class);
                 }
-                return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                return json_encode($stmt->fetchAll(\PDO::FETCH_ASSOC), JSON_PRETTY_PRINT);
             }
-            if(!$mode){
+            if(!$json){
                 return $stmt->fetchObject(static::class);
             }
-            return $stmt->fetch(\PDO::FETCH_ASSOC);
+            return json_encode($stmt->fetch(\PDO::FETCH_ASSOC), JSON_PRETTY_PRINT);
         } catch (\PDOException $exception) {
             $this->fail = $exception;
             return null;
@@ -47,9 +48,14 @@ abstract class Model extends DataLayer
      * @param bool $all 
      * @return void
      */
-    public function fetchJson(bool $all)
+    public function fetchJson(?bool $all = false)
     {
-        return $this->fetch($all, 'json');
+        return $this->fetch($all, true);
+    }
+
+    public function findByIdJsonFormat($id)
+    {
+        return json_encode(parent::findById($id)->data(), JSON_PRETTY_PRINT);
     }
 
     // /**

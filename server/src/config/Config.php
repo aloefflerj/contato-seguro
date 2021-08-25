@@ -4,7 +4,7 @@ define("DATA_LAYER_CONFIG", [
     "driver" => "mysql",
     "host" => "127.0.0.1",
     "port" => "3306",
-    "dbname" => "rpg_todo_app",
+    "dbname" => "contato_seguro_app",
     "username" => "root",
     "passwd" => "",
     "options" => [

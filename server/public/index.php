@@ -3,31 +3,47 @@
 use DI\Container;
 use Slim\Factory\AppFactory;
 use Source\App\Middlewares\JsonMiddleware;
-use Source\App\Controllers\Chars;
+use Source\App\Controllers\Users;
 use Slim\Routing\RouteCollectorProxy;
 use Source\App\Controllers\Web;
 use Source\App\Middlewares\AllowCrossOrigin;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+//Container adicionado para invocar as funcionalidades das rotas em uma classe separada
 $container = new Container();
 AppFactory::setContainer($container);
 
 $app = AppFactory::create();
 
+
+$app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();
 $errorMiddleWare = $app->addErrorMiddleware(true, true, true);
-// $app->add(new JsonMiddleware());
 
-$app->get('/', Web::class . ':home')->add(new AllowCrossOrigin)->add(new JsonMiddleware());
+$app->get('/', Web::class . ':home')->add(new AllowCrossOrigin);
+$app->post('/', Web::class . ':create')->add(new AllowCrossOrigin);
 
-$app->group('/chars', function (RouteCollectorProxy $group) {
+// $app->post('/', function (ServerRequestInterface $request, $response) {
+//     $formDataArry = $request->getParsedBody();
+//     $response->getBody()->write('<pre>', var_dump($formDataArry), '</pre>');
+//  });
 
-    $group->get('', Chars::class . ':getAll')->setName('getAll');
-    // $routeParser = $group->getRouteCollector()->getRouteParser();
-    // $group->redirect('/',  '/chars/json');
+//Rotas do controlador 'Users'
+$app->group('/v1/users', function (RouteCollectorProxy $group) {
 
-    $group->get('/{id}', Chars::class . ':getChar')->setName('getChar');
+    $group->get('', Users::class . ':get')->setName('get');
+    $group->post('', Users::class . ':newUser')->setName('newUser');
+
+    $group->get('/{id}', Users::class . ':getUser')->setName('getUser');
+    $group->delete('/{id}', Users::class . ':deleteUser')->setName('deleteUser');
+    $group->put('/{id}', Users::class . ':updateUser')->setName('updateUser');
+    // $group->patch('/{id}', Users::class . ':updateUserData')->setName('updateUserData');
+
+    $group->group('/group', function(RouteCollectorProxy $group) {
+        $group->get('/{field}', Users::class . ':groupUsers')->setName('groupUsers');
+        $group->get('/{field}/{value}', Users::class . ':groupUsersBy')->setName('groupUsersBy');
+    });
 
 })->add(new AllowCrossOrigin())->add(new JsonMiddleware());
 

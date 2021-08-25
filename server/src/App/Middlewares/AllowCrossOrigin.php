@@ -16,7 +16,7 @@ class AllowCrossOrigin
 
         $response = new Response();
         $response->getBody()->write($existingContent);
-        header("Access-Control-Allow-Origin: *");
+        // header("Access-Control-Allow-Origin: *");
         return $response->withHeader("Access-Control-Allow-Origin", "*");
     }
 }
