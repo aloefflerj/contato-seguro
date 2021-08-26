@@ -17,11 +17,31 @@ import {
 import './modal.css'
 
 const ModalTemplate = (props) => {
-    const { buttonLabel, className, title, method } = props
+    const { buttonLabel, className, title, method, action, userInfo } = props
 
     const [modal, setModal] = useState(false)
 
-    const toggle = () => setModal(!modal)
+    const [user, setUser] = useState({
+        user: {
+            id: '',
+            name: '',
+            mail: '',
+            phone: '',
+            birth: '',
+            city: '',
+        },
+    })
+
+    // if(method == 'put') {
+    //   setUser(userInfo)
+    // }
+
+    const toggle = () => handleModal(!modal)
+
+    const handleModal = () => {
+        setModal(!modal)
+        setUser(userInfo)
+    }
 
     const closeBtn = (
         <Button color='white' onClick={toggle}>
@@ -39,10 +59,16 @@ const ModalTemplate = (props) => {
                     <strong>{title}</strong>
                 </ModalHeader>
                 <ModalBody>
-                    <Form method={method}>
+                    <Form method={method} action={action}>
                         <FormGroup>
                             <Label for='name'>Nome:</Label>
-                            <Input type='text' name='name' id='name' required />
+                            <Input
+                                type='text'
+                                name='name'
+                                id='name'
+                                required
+                                value={user.name}
+                            />
                             <FormFeedback invalid>
                                 {/* colocar resposta de json errado aqui */}
                             </FormFeedback>
@@ -50,7 +76,13 @@ const ModalTemplate = (props) => {
                         </FormGroup>
                         <FormGroup>
                             <Label for='mail'>E-mail:</Label>
-                            <Input type='text' name='mail' id='mail' required />
+                            <Input
+                                type='text'
+                                name='mail'
+                                id='mail'
+                                required
+                                value={user.mail}
+                            />
                             <FormFeedback invalid>
                                 {/* colocar resposta de json errado aqui */}
                             </FormFeedback>
@@ -64,6 +96,7 @@ const ModalTemplate = (props) => {
                                         type='phone'
                                         name='phone'
                                         id='phone'
+                                        value={user.phone}
                                     />
                                     <FormFeedback invalid>
                                         {/* colocar resposta de json errado aqui */}
@@ -80,6 +113,7 @@ const ModalTemplate = (props) => {
                                         name='birth'
                                         id='birth'
                                         color='light'
+                                        value={user.birth}
                                     />
                                     <FormFeedback invalid>
                                         {/* colocar resposta de json errado aqui */}
@@ -88,24 +122,28 @@ const ModalTemplate = (props) => {
                             </Col>
                         </Row>
                         <FormGroup>
-                            <Label for='birth'>Cidade onde nasceu:</Label>
+                            <Label for='city'>Cidade onde nasceu:</Label>
                             <Input
-                                type='location'
-                                name='birth'
-                                id='birth'
+                                type='text'
+                                name='city'
+                                id='city'
                                 color='light'
+                                value={user.city}
+                                onChange={(e) =>
+                                    setUser({ ...user, [user.city]: e.target.value })
+                                }
                             />
                             <FormFeedback invalid>
                                 {/* colocar resposta de json errado aqui */}
                             </FormFeedback>
                         </FormGroup>
                         <Row form>
-                          <Button color='dark' type='reset'>
-                              Limpar
-                          </Button>
-                          <Button color='dark' type='reset'>
-                              Enviar
-                          </Button>
+                            <Button color='dark' type='reset'>
+                                Limpar
+                            </Button>
+                            <Button color='dark' type='submit'>
+                                Enviar
+                            </Button>
                         </Row>
                     </Form>
                 </ModalBody>
