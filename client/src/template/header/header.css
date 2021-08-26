@@ -2,14 +2,12 @@ header.header {
     grid-area: header;
     display: flex;
     flex-direction: column;
-    background-color: lightseagreen;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
 }
 
 header.header .upper-header {
     height: 75%;
-    background-color: lightgoldenrodyellow;
     display: flex;
     padding-top: 20px;
     border-top-left-radius: 4px;
@@ -27,6 +25,16 @@ header.header .lower-header {
     padding: 5px 20px;
     justify-content: center;
     align-items: center;
-    background-color:lightcoral
+    border-top: solid 1px #ddd;
+    border-bottom: solid 1px #ddd;
 
+}
+
+header.header .lower-header :nth-child(2) {
+    margin-left: 25%;
+}
+
+header.header .lower-header :nth-child(3) {
+    width: 240px;
+    margin-left: 60px;
 }

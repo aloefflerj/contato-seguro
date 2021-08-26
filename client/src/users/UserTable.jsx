@@ -34,7 +34,7 @@ class UserTable extends Component {
     renderUsers() {
         return this.state.users.map(
             (user) => (
-                <UserRow
+                <UserRow id={user.id}
                     name={user.name}
                     mail={user.mail}
                     phone={user.phone}

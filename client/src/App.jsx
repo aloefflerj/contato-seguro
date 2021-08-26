@@ -1,6 +1,5 @@
 import React from 'react'
 import './App.css'
-import { Button } from 'reactstrap'
 import Modal from './common/Modal'
 import Header from './template/header/Header'
 import Content from './template/content/Content'

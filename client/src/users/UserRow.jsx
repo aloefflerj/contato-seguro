@@ -7,7 +7,7 @@ const UserRow = (props) => {
     return (
         <>
             <tr key={props.id}>
-                <td>{props.name}</td>
+                <td >{props.name}</td>
                 <td>{props.mail}</td>
                 <td>{props.phone}</td>
                 <td>{props.birth}</td>

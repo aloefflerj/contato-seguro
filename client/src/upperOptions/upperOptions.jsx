@@ -10,14 +10,13 @@ const upperOptions = (props) => {
             <Button color='dark'>
                 <FontAwesomeIcon icon={faPlus} />
             </Button>
-            {/* <input type='search' name='search' id='search' /> */}
             <Input placeholder='Buscar...' />
-            <select class='form-select text-muted' aria-label='filtro'>
-                <option selected value='1'>Nome</option>
-                <option value='2'>E-mail</option>
-                <option value='3'>Telefone</option>
-                <option value='3'>Nascimento</option>
-                <option value='4'>Cidade</option>
+            <select className='form-select text-muted' aria-label='filtro' defaultValue='2'>
+                <option className='text-dark' value='1'>Nome</option>
+                <option className='text-dark' value='2'>E-mail</option>
+                <option className='text-dark' value='3'>Telefone</option>
+                <option className='text-dark' value='3'>Nascimento</option>
+                <option className='text-dark' value='4'>Cidade</option>
             </select>
         </>
     )
