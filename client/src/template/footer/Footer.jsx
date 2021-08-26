@@ -7,8 +7,8 @@ const Footer = () => {
     return (
         <footer className='footer'>
             <span className='text-muted'>
-                Feito com muito&nbsp; <FontAwesomeIcon icon={faMugHot} />
-                &nbsp; por Anderson
+                ~ Feito com muito&nbsp; <FontAwesomeIcon icon={faMugHot} />
+                &nbsp; por Anderson ~
             </span>
         </footer>
     )

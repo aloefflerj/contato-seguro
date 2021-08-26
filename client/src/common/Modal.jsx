@@ -1,18 +1,33 @@
-/* eslint react/no-multi-comp: 0, react/prop-types: 0 */
-
 import React, { useState } from 'react'
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
+import {
+    Button,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    Form,
+    FormGroup,
+    Label,
+    Input,
+    FormFeedback,
+    FormText,
+    Row,
+    Col,
+} from 'reactstrap'
+import './modal.css'
 
 const ModalTemplate = (props) => {
-    const { buttonLabel, className } = props
+    const { buttonLabel, className, title, method } = props
 
     const [modal, setModal] = useState(false)
 
     const toggle = () => setModal(!modal)
 
-    const closeBtn = <Button color='white' onClick={toggle}><span color='muted'>&#x2715;</span></Button>
+    const closeBtn = (
+        <Button color='white' onClick={toggle}>
+            <span color='muted'>&#x2715;</span>
+        </Button>
+    )
 
     return (
         <div>
@@ -20,25 +35,80 @@ const ModalTemplate = (props) => {
                 {buttonLabel}
             </Button>
             <Modal isOpen={modal} toggle={toggle} className={className}>
-                <ModalHeader toggle={toggle} close={closeBtn}>Modal title</ModalHeader>
+                <ModalHeader toggle={toggle} close={closeBtn}>
+                    <strong>{title}</strong>
+                </ModalHeader>
                 <ModalBody>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit
-                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                    occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum.
+                    <Form method={method}>
+                        <FormGroup>
+                            <Label for='name'>Nome:</Label>
+                            <Input type='text' name='name' id='name' required />
+                            <FormFeedback invalid>
+                                {/* colocar resposta de json errado aqui */}
+                            </FormFeedback>
+                            <FormText>Obrigatório</FormText>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for='mail'>E-mail:</Label>
+                            <Input type='text' name='mail' id='mail' required />
+                            <FormFeedback invalid>
+                                {/* colocar resposta de json errado aqui */}
+                            </FormFeedback>
+                            <FormText>Obrigatório</FormText>
+                        </FormGroup>
+                        <Row>
+                            <Col md={6}>
+                                <FormGroup>
+                                    <Label for='phone'>Telefone:</Label>
+                                    <Input
+                                        type='phone'
+                                        name='phone'
+                                        id='phone'
+                                    />
+                                    <FormFeedback invalid>
+                                        {/* colocar resposta de json errado aqui */}
+                                    </FormFeedback>
+                                </FormGroup>
+                            </Col>
+                            <Col md={6}>
+                                <FormGroup>
+                                    <Label for='birth'>
+                                        Data de nascimento:
+                                    </Label>
+                                    <Input
+                                        type='date'
+                                        name='birth'
+                                        id='birth'
+                                        color='light'
+                                    />
+                                    <FormFeedback invalid>
+                                        {/* colocar resposta de json errado aqui */}
+                                    </FormFeedback>
+                                </FormGroup>
+                            </Col>
+                        </Row>
+                        <FormGroup>
+                            <Label for='birth'>Cidade onde nasceu:</Label>
+                            <Input
+                                type='location'
+                                name='birth'
+                                id='birth'
+                                color='light'
+                            />
+                            <FormFeedback invalid>
+                                {/* colocar resposta de json errado aqui */}
+                            </FormFeedback>
+                        </FormGroup>
+                        <Row form>
+                          <Button color='dark' type='reset'>
+                              Limpar
+                          </Button>
+                          <Button color='dark' type='reset'>
+                              Enviar
+                          </Button>
+                        </Row>
+                    </Form>
                 </ModalBody>
-                <ModalFooter>
-                    <Button color='primary' onClick={toggle}>
-                        Do Something
-                    </Button>{' '}
-                    <Button color='secondary' onClick={toggle}>
-                        Cancel
-                    </Button>
-                </ModalFooter>
             </Modal>
         </div>
     )

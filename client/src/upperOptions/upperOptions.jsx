@@ -9,7 +9,7 @@ const upperOptions = (props) => {
             {/* <Button color='dark'>
                 <FontAwesomeIcon icon={faPlus} />
             </Button> */}
-            <Modal buttonLabel={<FontAwesomeIcon icon={faPlus} />} action={'add'} />
+            <Modal buttonLabel={<FontAwesomeIcon icon={faPlus} />} action={'add'} title='Inserir' />
             <Input placeholder='Buscar...' />
             <select className='form-select text-muted' aria-label='filtro' defaultValue='2'>
                 <option className='text-dark' value='1'>Nome</option>
