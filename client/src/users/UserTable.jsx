@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Table } from 'reactstrap'
-import User from './User'
+import UserRow from './UserRow'
 import axios from 'axios'
+import './user.css'
 
 const usersUrl = 'http://localhost:8000/v1/users'
 
@@ -10,11 +11,11 @@ const usersUrl = 'http://localhost:8000/v1/users'
 //         console.log(res)
 //     })
 
-class Users extends Component {
+class UserTable extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            users: []
+            users: [],
         }
         this.renderUsers = this.renderUsers.bind(this)
     }
@@ -24,22 +25,30 @@ class Users extends Component {
     }
 
     getUsers = async () => {
-        await axios.get(usersUrl).then(res => {
+        await axios.get(usersUrl).then((res) => {
             const users = res.data
-            this.setState({users})
+            this.setState({ users })
         })
     }
 
     renderUsers() {
-        this.state.users.map(user => {
-             return(<p>{user.name}</p>)
+        return this.state.users.map(
+            (user) => (
+                <UserRow
+                    name={user.name}
+                    mail={user.mail}
+                    phone={user.phone}
+                    birth={user.birth}
+                    city={user.city}
+                />
+            )
             // console.log(user.name)
-        })
+        )
     }
     render() {
         return (
-            <div>
-                <Table>
+            <>
+                <Table responsive className='user-table'>
                     <thead>
                         <tr>
                             <th>Nome</th>
@@ -47,15 +56,16 @@ class Users extends Component {
                             <th>Telefone</th>
                             <th>Nascimento</th>
                             <th>Cidade</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.users.map(user => <User name={user.name} mail={user.mail} phone={user.phone} birth={user.birth} city={user.city} />)}
+                        {this.renderUsers()}
                     </tbody>
                 </Table>
-            </div>
+            </>
         )
     }
 }
 
-export default Users
+export default UserTable

@@ -20,3 +20,13 @@ header.header .upper-header img {
     object-fit: scale-down;
     width: 100%;
 }
+
+header.header .lower-header {
+    display: flex;
+    height: 100%;
+    padding: 5px 20px;
+    justify-content: center;
+    align-items: center;
+    background-color:lightcoral
+
+}
