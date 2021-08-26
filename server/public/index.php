@@ -6,7 +6,7 @@ use Source\App\Middlewares\JsonMiddleware;
 use Source\App\Controllers\Users;
 use Slim\Routing\RouteCollectorProxy;
 use Source\App\Controllers\Web;
-use Source\App\Middlewares\AllowCrossOrigin;
+use Source\App\Middlewares\RestApi;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -21,14 +21,14 @@ $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();
 $errorMiddleWare = $app->addErrorMiddleware(true, true, true);
 
-$app->get('/', Web::class . ':home')->add(new AllowCrossOrigin);
-$app->post('/', Web::class . ':create')->add(new AllowCrossOrigin);
+$app->get('/', Web::class . ':home')->add(new RestApi);
+$app->post('/', Web::class . ':create')->add(new RestApi);
 
 // $app->post('/', function (ServerRequestInterface $request, $response) {
 //     $formDataArry = $request->getParsedBody();
 //     $response->getBody()->write('<pre>', var_dump($formDataArry), '</pre>');
 //  });
-
+// $app->add(new JsonMiddleware());
 //Rotas do controlador 'Users'
 $app->group('/v1/users', function (RouteCollectorProxy $group) {
 
@@ -45,7 +45,7 @@ $app->group('/v1/users', function (RouteCollectorProxy $group) {
         $group->get('/{field}/{value}', Users::class . ':groupUsersBy')->setName('groupUsersBy');
     });
 
-})->add(new AllowCrossOrigin())->add(new JsonMiddleware());
+})->add(new RestApi());
 
 
 $app->run();

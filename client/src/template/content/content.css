@@ -1,6 +1,5 @@
 main.content {
     grid-area: content;
-    display: flex;
-    background-color: lightgreen;
+    background-color: lightblue;
     display: flex;
 }

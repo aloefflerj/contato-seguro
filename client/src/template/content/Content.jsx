@@ -1,10 +1,9 @@
 import React from 'react'
-
 import './content.css'
 
 const Content = props => {
     return (
-        <main className='content'>
+        <main className="content">
             {props.children}
         </main>
     )

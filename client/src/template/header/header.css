@@ -1,5 +1,22 @@
 header.header {
     grid-area: header;
-    background-color: coral;
     display: flex;
+    flex-direction: column;
+    background-color: lightseagreen;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+header.header .upper-header {
+    height: 75%;
+    background-color: lightgoldenrodyellow;
+    display: flex;
+    padding-top: 20px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+header.header .upper-header img {
+    object-fit: scale-down;
+    width: 100%;
 }
