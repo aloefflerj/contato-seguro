@@ -79,8 +79,9 @@ class Users
 
     public function newUser(ServerRequest $request, Response $response)
     {
-
         $body = $request->getParsedBody();
+        // $response->getBody()->write("<pre>" . var_dump($body) . "<pre>");
+        // return $response;
         $body = filter_var_array($body, FILTER_DEFAULT);
         $user = $this->users->register(
             $body['name'],
@@ -160,8 +161,8 @@ class Users
                     return $response;
                 }
 
-        $body = filter_var_array($request->getParsedBody(), FILTER_DEFAULT);
-                
+        $body = json_decode(file_get_contents('php://input'), true);
+        $body = $request->withParsedBody($body)->getParsedBody();
         if(empty($body['name']) && empty($body['mail'])){
             $response->getBody()->write(json_encode([
                 'message' => [

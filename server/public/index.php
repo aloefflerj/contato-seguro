@@ -10,6 +10,7 @@ use Source\App\Middlewares\RestApi;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+
 //Container adicionado para invocar as funcionalidades das rotas em uma classe separada
 $container = new Container();
 AppFactory::setContainer($container);
@@ -20,6 +21,7 @@ $app = AppFactory::create();
 $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();
 $errorMiddleWare = $app->addErrorMiddleware(true, true, true);
+// $app->addMiddleware(new JsonMiddleware());
 
 $app->get('/', Web::class . ':home')->add(new RestApi);
 $app->post('/', Web::class . ':create')->add(new RestApi);
@@ -32,6 +34,11 @@ $app->post('/', Web::class . ':create')->add(new RestApi);
 //Rotas do controlador 'Users'
 $app->group('/v1/users', function (RouteCollectorProxy $group) {
 
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Headers: Authorization,Origin,X-Requested-With,Content-Type,Range");
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+    // header("Content-Type: application/json");
+
     $group->get('', Users::class . ':get')->setName('get');
     $group->post('', Users::class . ':newUser')->setName('newUser');
 
@@ -40,12 +47,11 @@ $app->group('/v1/users', function (RouteCollectorProxy $group) {
     $group->put('/{id}', Users::class . ':updateUser')->setName('updateUser');
     // $group->patch('/{id}', Users::class . ':updateUserData')->setName('updateUserData');
 
-    $group->group('/group', function(RouteCollectorProxy $group) {
+    $group->group('/group', function (RouteCollectorProxy $group) {
         $group->get('/{field}', Users::class . ':groupUsers')->setName('groupUsers');
         $group->get('/{field}/{value}', Users::class . ':groupUsersBy')->setName('groupUsersBy');
     });
-
-})->add(new RestApi());
+})->add(new JsonMiddleware());
 
 
 $app->run();

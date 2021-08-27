@@ -25,7 +25,7 @@ class UserTable extends Component {
     }
 
     getUsers = async () => {
-        await axios.get(usersUrl).then((res) => {
+        await axios.get(usersUrl).then(res => {
             const users = res.data
             this.setState({ users })
         })
@@ -33,8 +33,10 @@ class UserTable extends Component {
 
     renderUsers() {
         return this.state.users.map(
-            (user) => (
-                <UserRow id={user.id}
+            user => (
+                <UserRow
+                    key={user.id}
+                    id={user.id}
                     name={user.name}
                     mail={user.mail}
                     phone={user.phone}
@@ -59,9 +61,7 @@ class UserTable extends Component {
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {this.renderUsers()}
-                    </tbody>
+                    <tbody>{this.renderUsers()}</tbody>
                 </Table>
             </>
         )

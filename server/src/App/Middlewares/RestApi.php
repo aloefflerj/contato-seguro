@@ -16,7 +16,8 @@ class RestApi
 
         $response = new Response();
         $response->getBody()->write($existingContent);
-        header("Access-Control-Allow-Origin: *");
-        return $response->withHeader('Content-Type', 'application/json');
+        // header("Content-Type: application/json", true);
+        // return $response->withHeader("Access-Control-Allow-Origin", "*");
+        return $response->withAddedHeader("Content-Type", "application/json");
     }
 }

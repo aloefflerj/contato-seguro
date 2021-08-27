@@ -4,7 +4,6 @@ import {
     Modal,
     ModalHeader,
     ModalBody,
-    ModalFooter,
     Form,
     FormGroup,
     Label,
@@ -14,9 +13,19 @@ import {
     Row,
     Col,
 } from 'reactstrap'
+
+import axios from 'axios'
+
 import './modal.css'
 
-const ModalTemplate = (props) => {
+axios.defaults.baseURL = 'http://localhost:8000/v1/users'
+// axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+axios.defaults.headers.post['Content-Type'] = 'application/json'
+
+
+// const baseUrl = 'http://localhost:8000/v1/users'
+
+const ModalTemplate = props => {
     const { buttonLabel, className, title, method, action, userInfo } = props
 
     const [modal, setModal] = useState(false)
@@ -32,15 +41,87 @@ const ModalTemplate = (props) => {
         },
     })
 
-    // if(method == 'put') {
-    //   setUser(userInfo)
-    // }
-
     const toggle = () => handleModal(!modal)
 
     const handleModal = () => {
         setModal(!modal)
-        setUser(userInfo)
+        setUser(userInfo ?? user)
+        console.log(user)
+    }
+
+    const handleChange = e => {
+        const { name, value } = e.target
+        setUser(prevUser => ({
+            ...user,
+            [name]: value,
+        }))
+    }
+
+    const clearFields = e => {
+        e.preventDefault()
+        setUser({
+            ...user,
+            id: '',
+            name: '',
+            mail: '',
+            phone: '',
+            birth: '',
+            city: '',
+        })
+    }
+
+    const handleSubmit = e => {
+        e.preventDefault()
+        switch (props.method) {
+            case 'put':
+                updateUser()
+                break
+            case 'post':
+                newUser()
+        }
+    }
+
+    const newUser = async () => {
+        await axios
+            .post(
+                '',
+                JSON.stringify({
+                    id: user.id,
+                    name: user.name,
+                    mail: user.mail,
+                    phone: user.phone,
+                    birth: user.birth,
+                    city: user.city
+                })
+            )
+            .then(res => {
+                console.log(res.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    const updateUser = async () => {
+        await axios
+            .put('/' + user.id, JSON.stringify({
+                id: user.id,
+                name: user.name,
+                mail: user.mail,
+                phone: user.phone,
+                birth: user.birth,
+                city: user.city
+            }), {
+                headers: {
+                    'Content-Type': 'application-json',
+                },
+            })
+            .then(res => {
+                console.log(res.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     const closeBtn = (
@@ -68,8 +149,9 @@ const ModalTemplate = (props) => {
                                 id='name'
                                 required
                                 value={user.name}
+                                onChange={handleChange}
                             />
-                            <FormFeedback invalid>
+                            <FormFeedback>
                                 {/* colocar resposta de json errado aqui */}
                             </FormFeedback>
                             <FormText>Obrigatório</FormText>
@@ -82,8 +164,9 @@ const ModalTemplate = (props) => {
                                 id='mail'
                                 required
                                 value={user.mail}
+                                onChange={handleChange}
                             />
-                            <FormFeedback invalid>
+                            <FormFeedback>
                                 {/* colocar resposta de json errado aqui */}
                             </FormFeedback>
                             <FormText>Obrigatório</FormText>
@@ -97,8 +180,9 @@ const ModalTemplate = (props) => {
                                         name='phone'
                                         id='phone'
                                         value={user.phone}
+                                        onChange={handleChange}
                                     />
-                                    <FormFeedback invalid>
+                                    <FormFeedback>
                                         {/* colocar resposta de json errado aqui */}
                                     </FormFeedback>
                                 </FormGroup>
@@ -114,8 +198,9 @@ const ModalTemplate = (props) => {
                                         id='birth'
                                         color='light'
                                         value={user.birth}
+                                        onChange={handleChange}
                                     />
-                                    <FormFeedback invalid>
+                                    <FormFeedback>
                                         {/* colocar resposta de json errado aqui */}
                                     </FormFeedback>
                                 </FormGroup>
@@ -129,19 +214,17 @@ const ModalTemplate = (props) => {
                                 id='city'
                                 color='light'
                                 value={user.city}
-                                onChange={(e) =>
-                                    setUser({ ...user, [user.city]: e.target.value })
-                                }
+                                onChange={handleChange}
                             />
-                            <FormFeedback invalid>
+                            <FormFeedback>
                                 {/* colocar resposta de json errado aqui */}
                             </FormFeedback>
                         </FormGroup>
                         <Row form>
-                            <Button color='dark' type='reset'>
+                            <Button color='dark' onClick={clearFields}>
                                 Limpar
                             </Button>
-                            <Button color='dark' type='submit'>
+                            <Button color='dark' onClick={handleSubmit}>
                                 Enviar
                             </Button>
                         </Row>
