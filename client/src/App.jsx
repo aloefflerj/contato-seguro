@@ -1,4 +1,4 @@
-import React, { useState, Component } from 'react'
+import React, { Component } from 'react'
 import './App.css'
 import Header from './template/header/Header'
 import Content from './template/content/Content'

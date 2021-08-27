@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Table } from 'reactstrap'
 import UserRow from './UserRow'
 import './user.css'

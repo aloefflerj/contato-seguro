@@ -20,4 +20,10 @@ const updateUser = (id, data) =>
         return res
     })
 
-export { getUsers, newUser, updateUser }
+const deleteUser = id =>
+    api.delete('/' + id).then(res => {
+        // console.log(req)
+        return res
+    })
+
+export { getUsers, newUser, updateUser, deleteUser }

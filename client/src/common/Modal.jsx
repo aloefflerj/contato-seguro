@@ -14,7 +14,7 @@ import {
     Col,
 } from 'reactstrap'
 
-import { getUsers, newUser, updateUser } from '../routes/routes'
+import { newUser, updateUser } from '../routes/routes'
 
 import './modal.css'
 
@@ -45,7 +45,6 @@ const ModalTemplate = props => {
     const handleModal = () => {
         setModal(!modal)
         setUser(userInfo ?? user)
-        console.log(user)
     }
 
     const handleChange = e => {
@@ -86,6 +85,8 @@ const ModalTemplate = props => {
                 })
                 displayMessage((await res).data)
                 break
+            default:
+                displayMessage('')
         }
         //reload dos usuários
         props.init()
