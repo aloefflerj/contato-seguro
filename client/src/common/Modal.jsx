@@ -14,14 +14,13 @@ import {
     Col,
 } from 'reactstrap'
 
-import axios from 'axios'
+import { getUsers, newUser, updateUser } from '../routes/routes'
 
 import './modal.css'
 
-axios.defaults.baseURL = 'http://localhost:8000/v1/users'
-// axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-axios.defaults.headers.post['Content-Type'] = 'application/json'
-
+// axios.defaults.baseURL = 'http://localhost:8000/v1/users'
+// // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+// axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 // const baseUrl = 'http://localhost:8000/v1/users'
 
@@ -70,58 +69,31 @@ const ModalTemplate = props => {
         })
     }
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         e.preventDefault()
+        const {name, mail, phone, birth, city} = user
+        let res
         switch (props.method) {
-            case 'put':
-                updateUser()
-                break
             case 'post':
-                newUser()
-        }
-    }
-
-    const newUser = async () => {
-        await axios
-            .post(
-                '',
-                JSON.stringify({
-                    id: user.id,
-                    name: user.name,
-                    mail: user.mail,
-                    phone: user.phone,
-                    birth: user.birth,
-                    city: user.city
+                res = newUser({
+                    name, mail, phone, birth, city
                 })
-            )
-            .then(res => {
-                console.log(res.data)
-            })
-            .catch(err => {
-                console.log(err)
-            })
+                displayMessage((await res).data)
+                break
+            case 'put':
+                res = updateUser(user.id, {
+                    name, mail, phone, birth, city
+                })
+                displayMessage((await res).data)
+                break
+        }
+        //reload dos usuários
+        props.init()
+        toggle()
     }
 
-    const updateUser = async () => {
-        await axios
-            .put('/' + user.id, JSON.stringify({
-                id: user.id,
-                name: user.name,
-                mail: user.mail,
-                phone: user.phone,
-                birth: user.birth,
-                city: user.city
-            }), {
-                headers: {
-                    'Content-Type': 'application-json',
-                },
-            })
-            .then(res => {
-                console.log(res.data)
-            })
-            .catch(err => {
-                console.log(err)
-            })
+    const displayMessage = msg => {
+        console.log(msg)
     }
 
     const closeBtn = (

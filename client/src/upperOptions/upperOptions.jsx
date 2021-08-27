@@ -4,7 +4,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { Input } from 'reactstrap'
 import Modal from '../common/Modal'
 
-const upperOptions = (props) => {
+const upperOptions = props => {
     const baseUrl = 'http://localhost:8000/v1/users'
 
     return (
@@ -12,14 +12,35 @@ const upperOptions = (props) => {
             {/* <Button color='dark'>
                 <FontAwesomeIcon icon={faPlus} />
             </Button> */}
-            <Modal buttonLabel={<FontAwesomeIcon icon={faPlus} />} action={baseUrl} method='post' userInfo='false' title='Inserir' />
+            <Modal
+                buttonLabel={<FontAwesomeIcon icon={faPlus} />}
+                action={baseUrl}
+                method='post'
+                userInfo='false'
+                title='Inserir'
+                init={props.init}
+            />
             <Input placeholder='Buscar...' />
-            <select className='form-select text-muted' aria-label='filtro' defaultValue='2'>
-                <option className='text-dark' value='1'>Nome</option>
-                <option className='text-dark' value='2'>E-mail</option>
-                <option className='text-dark' value='3'>Telefone</option>
-                <option className='text-dark' value='3'>Nascimento</option>
-                <option className='text-dark' value='4'>Cidade</option>
+            <select
+                className='form-select text-muted'
+                aria-label='filtro'
+                defaultValue='2'
+            >
+                <option className='text-dark' value='1'>
+                    Nome
+                </option>
+                <option className='text-dark' value='2'>
+                    E-mail
+                </option>
+                <option className='text-dark' value='3'>
+                    Telefone
+                </option>
+                <option className='text-dark' value='3'>
+                    Nascimento
+                </option>
+                <option className='text-dark' value='4'>
+                    Cidade
+                </option>
             </select>
         </>
     )

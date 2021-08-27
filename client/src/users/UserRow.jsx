@@ -21,6 +21,7 @@ const UserRow = props => {
                         method='put'
                         action={baseUrl + '/' + props.id}
                         userInfo={props}
+                        init={props.init}
                     />
                     <Button color='dark'>
                         <FontAwesomeIcon icon={faTrashAlt} />
