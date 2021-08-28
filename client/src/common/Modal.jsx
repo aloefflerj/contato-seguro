@@ -18,12 +18,6 @@ import { newUser, updateUser } from '../routes/routes'
 
 import './modal.css'
 
-// axios.defaults.baseURL = 'http://localhost:8000/v1/users'
-// // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-// axios.defaults.headers.post['Content-Type'] = 'application/json'
-
-// const baseUrl = 'http://localhost:8000/v1/users'
-
 const ModalTemplate = props => {
     const { buttonLabel, className, title, method, action, userInfo } = props
 
@@ -49,7 +43,7 @@ const ModalTemplate = props => {
 
     const handleChange = e => {
         const { name, value } = e.target
-        setUser(prevUser => ({
+        setUser(() => ({
             ...user,
             [name]: value,
         }))
@@ -131,7 +125,7 @@ const ModalTemplate = props => {
                         </FormGroup>
                         <FormGroup>
                             <Label for='mail'>E-mail:</Label>
-                            <Input
+                            <Input invalid={true}
                                 type='text'
                                 name='mail'
                                 id='mail'
@@ -139,8 +133,9 @@ const ModalTemplate = props => {
                                 value={user.mail}
                                 onChange={handleChange}
                             />
-                            <FormFeedback>
+                            <FormFeedback invalid={true}>
                                 {/* colocar resposta de json errado aqui */}
+                                oi
                             </FormFeedback>
                             <FormText>Obrigatório</FormText>
                         </FormGroup>

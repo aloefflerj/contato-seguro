@@ -4,7 +4,7 @@ import Header from './template/header/Header'
 import Content from './template/content/Content'
 import Footer from './template/footer/Footer'
 import UserTable from './users/UserTable'
-import UpperOptions from './upperOptions/upperOptions'
+import UpperOptions from './upperOptions/UpperOptions'
 import { getUsers } from './routes/routes'
 
 class App extends Component {
@@ -12,6 +12,7 @@ class App extends Component {
         super(props)
         this.state = {
             users: [],
+            filteredUsers: []
         }
     }
 
@@ -25,17 +26,53 @@ class App extends Component {
         const usersResponse = (await res).data
         this.setState({
             users: usersResponse,
+            filteredUsers: usersResponse
         })
+    }
+
+    filter = (value, filter) => {
+        if(value === ''){
+            this.init()
+        }
+        const users = []
+        this.state.users.map(user => {
+            for (var property in user) {
+                if (property === filter) {
+                    const parsedUserValue = this.normalizeString(user[property])
+                    const parsedInput = this.normalizeString(value)
+                    if (parsedUserValue.match(parsedInput)) {
+                        users.push(user)
+                    }
+                }
+            }
+        })
+        this.setState({
+            filteredUsers: users
+        })
+    }
+
+    normalizeString(str) {
+        const lowerCase = str.toLowerCase()
+        const parsed = lowerCase.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        return parsed
     }
 
     render() {
         return (
             <div className='App'>
                 <Header>
-                    <UpperOptions init={this.init} />
+                    <UpperOptions
+                        init={this.init}
+                        users={this.state.users}
+                        filter={this.filter}
+                    />
                 </Header>
                 <Content>
-                    <UserTable init={this.init} users={this.state.users} />
+                    <UserTable
+                        init={this.init}
+                        users={this.state.filteredUsers}
+                        filter={this.filter}
+                    />
                 </Content>
                 <Footer />
             </div>
