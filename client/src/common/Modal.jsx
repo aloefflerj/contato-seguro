@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import {
+    Alert,
     Button,
     Modal,
     ModalHeader,
@@ -23,6 +24,18 @@ const ModalTemplate = props => {
 
     const [modal, setModal] = useState(false)
 
+    const [error, setError] = useState({
+        status: false,
+        message: {
+            type: '',
+            fields: {
+                name: '',
+                mail: '',
+            },
+            content: '',
+        },
+    })
+
     const [user, setUser] = useState({
         user: {
             id: '',
@@ -39,6 +52,18 @@ const ModalTemplate = props => {
     const handleModal = () => {
         setModal(!modal)
         setUser(userInfo ?? user)
+        //reload dos usuários
+        setError({
+            status: false,
+            message: {
+                type: '',
+                fields: {
+                    name: '',
+                    mail: '',
+                },
+                content: '',
+            },
+        })
     }
 
     const handleChange = e => {
@@ -53,7 +78,6 @@ const ModalTemplate = props => {
         e.preventDefault()
         setUser({
             ...user,
-            id: '',
             name: '',
             mail: '',
             phone: '',
@@ -64,25 +88,39 @@ const ModalTemplate = props => {
 
     const handleSubmit = async e => {
         e.preventDefault()
-        const {name, mail, phone, birth, city} = user
+        const { name, mail, phone, birth, city } = user
+        let response = {}
         let res
         switch (props.method) {
             case 'post':
                 res = newUser({
-                    name, mail, phone, birth, city
+                    name,
+                    mail,
+                    phone,
+                    birth,
+                    city,
                 })
-                displayMessage((await res).data)
+                response = (await res).data
                 break
             case 'put':
                 res = updateUser(user.id, {
-                    name, mail, phone, birth, city
+                    name,
+                    mail,
+                    phone,
+                    birth,
+                    city,
                 })
-                displayMessage((await res).data)
+                response = (await res).data
                 break
             default:
                 displayMessage('')
         }
-        //reload dos usuários
+        if (response.message) {
+            setError({ ...error, status: true, message: response.message })
+            console.log(error.message)
+            // console.log(message)
+            return
+        }
         props.init()
         toggle()
     }
@@ -111,6 +149,7 @@ const ModalTemplate = props => {
                         <FormGroup>
                             <Label for='name'>Nome:</Label>
                             <Input
+                                invalid={error.message.fields.name}
                                 type='text'
                                 name='name'
                                 id='name'
@@ -119,13 +158,16 @@ const ModalTemplate = props => {
                                 onChange={handleChange}
                             />
                             <FormFeedback>
-                                {/* colocar resposta de json errado aqui */}
+                                {error.message.fields.name
+                                    ? error.message.content
+                                    : ''}
                             </FormFeedback>
                             <FormText>Obrigatório</FormText>
                         </FormGroup>
                         <FormGroup>
                             <Label for='mail'>E-mail:</Label>
-                            <Input invalid={true}
+                            <Input
+                                invalid={error.message.fields.mail}
                                 type='text'
                                 name='mail'
                                 id='mail'
@@ -134,8 +176,9 @@ const ModalTemplate = props => {
                                 onChange={handleChange}
                             />
                             <FormFeedback invalid={true}>
-                                {/* colocar resposta de json errado aqui */}
-                                oi
+                                {error.message.fields.mail
+                                    ? error.message.content
+                                    : ''}
                             </FormFeedback>
                             <FormText>Obrigatório</FormText>
                         </FormGroup>
@@ -164,7 +207,7 @@ const ModalTemplate = props => {
                                         type='date'
                                         name='birth'
                                         id='birth'
-                                        color='light'
+                                        color='pimary'
                                         value={user.birth}
                                         onChange={handleChange}
                                     />
@@ -188,6 +231,16 @@ const ModalTemplate = props => {
                                 {/* colocar resposta de json errado aqui */}
                             </FormFeedback>
                         </FormGroup>
+                        <Alert
+                            color='danger'
+                            isOpen={
+                                error.message.type &&
+                                !error.message.fields.mail &&
+                                !error.message.fields.name
+                            }
+                        >
+                            {error.message.content}
+                        </Alert>
                         <Row form>
                             <Button color='dark' onClick={clearFields}>
                                 Limpar

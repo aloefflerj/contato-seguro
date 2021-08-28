@@ -67,7 +67,7 @@ class Users
             $response->getBody()->write(json_encode([
                 'message' => [
                     'content' => 'Usuário não encontrado',
-                    'type' => 'error'
+                    'type' => 'error',
                 ]
             ]));
             return $response;
@@ -80,9 +80,24 @@ class Users
     public function newUser(ServerRequest $request, Response $response)
     {
         $body = $request->getParsedBody();
-        // $response->getBody()->write("<pre>" . var_dump($body) . "<pre>");
-        // return $response;
         $body = filter_var_array($body, FILTER_DEFAULT);
+
+        //Campos vazios para mensagem de erro
+        $fields = [
+            'name' => empty($body['name']) ?? false,
+            'mail' => empty($body['mail']) ?? false
+        ];
+        if (empty($body['name']) || empty($body['mail'])) {
+
+            $response->getBody()->write(json_encode([
+                'message' => [
+                    'content' => 'Por favor, preencha este campo',
+                    'type' => 'alert',
+                    'fields' => $fields
+                ]
+            ]));
+            return $response;
+        }
         $user = $this->users->register(
             $body['name'],
             $body['mail'],
@@ -95,7 +110,8 @@ class Users
                 json_encode([
                     'message' => [
                         'content' => $this->users->fail()->getMessage(),
-                        'type' => 'error'
+                        'type' => 'error',
+                        'fields' => ['name' => false, 'mail' => false]
                     ]
                 ])
             );
@@ -113,7 +129,8 @@ class Users
             $response->getBody()->write(json_encode([
                 'message' => [
                     'content' => 'Não é um valor inteiro válido',
-                    'type' => 'error'
+                    'type' => 'error',
+                    'fields' => ['name' => false, 'mail' => false]
                 ]
             ]));
             return $response;
@@ -124,7 +141,8 @@ class Users
             $response->getBody()->write(json_encode([
                 'message' => [
                     'content' => 'Usuário não encontrado',
-                    'type' => 'error'
+                    'type' => 'error',
+                    'fields' => ['name' => false, 'mail' => false]
                 ]
             ]));
             return $response;
@@ -144,30 +162,40 @@ class Users
             $response->getBody()->write(json_encode([
                 'message' => [
                     'content' => 'Não é um valor inteiro válido',
-                    'type' => 'error'
-                    ]
-                ]));
-                return $response;
-            }
-            
-            $user = $this->users->findById($id);
-            if (!$user) {
-                $response->getBody()->write(json_encode([
-                    'message' => [
-                        'content' => 'Usuário não encontrado',
-                        'type' => 'error'
-                        ]
-                    ]));
-                    return $response;
-                }
+                    'type' => 'error',
+                    'fields' => ['name' => false, 'mail' => false]
+                ]
+            ]));
+            return $response;
+        }
+
+        $user = $this->users->findById($id);
+        if (!$user) {
+            $response->getBody()->write(json_encode([
+                'message' => [
+                    'content' => 'Usuário não encontrado',
+                    'type' => 'error',
+                    'fields' => ['name' => false, 'mail' => false]
+                ]
+            ]));
+            return $response;
+        }
 
         $body = json_decode(file_get_contents('php://input'), true);
         $body = $request->withParsedBody($body)->getParsedBody();
-        if(empty($body['name']) && empty($body['mail'])){
+
+        //Resposta de campos vazios
+        $fields = [
+            'name' => empty($body['name']) ?? false,
+            'mail' => empty($body['mail']) ?? false
+        ];
+        if (empty($body['name']) || empty($body['mail'])) {
+
             $response->getBody()->write(json_encode([
                 'message' => [
-                    'content' => 'Por favor, preencha todos os campos obrigatórios',
-                    'type' => 'alert'
+                    'content' => 'Por favor, preencha este campo',
+                    'type' => 'alert',
+                    'fields' => $fields
                 ]
             ]));
             return $response;
@@ -179,16 +207,17 @@ class Users
         $user->birth    = $body['birth'] ?? null;
         $user->city     = $body['city'] ?? null;
         $user->save();
-        if(!$user->save()) {
+        if (!$user->save()) {
             $response->getBody()->write(json_encode([
                 'message' => [
                     'content' => $user->fail()->getMessage(),
-                    'type' => 'error'
+                    'type' => 'error',
+                    'fields' => $fields
                 ]
             ]));
             return $response;
         }
-        
+
 
         $response->getBody()->write($this->modelToJson($user));
         return $response;
@@ -215,5 +244,4 @@ class Users
         $response->getBody()->write(json_encode(["group users by"]));
         return $response;
     }
-    
 }
