@@ -1,0 +1,66 @@
+# version: '3.8'
+# services: 
+#   php-apache2:
+#     container_name: php-apache2
+#     build: 
+#         context: .
+#         dockerfile: php.Dockerfile
+#     image: php:7.4-apache
+#     volumes: 
+#       - ./server:/var/www/html
+#     ports:
+#       - 8000:80
+#   db2:
+#     container_name: db2
+#     build: 
+#         context: .
+#         dockerfile: mysql.Dockerfile
+#     image: mysql
+#     restart: always
+#     environment:
+#         MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+#         MYSQL_DATABASE: MYSQL_DATABASE
+#         MYSQL_USER: MYSQL_USER
+#         MYSQL_PASSWORD: MYSQL_PASSWORD
+#     ports:
+#         - "9906:3306"
+version: '3.8'
+services: 
+  php-apache2:
+    container_name: php-apache2
+    build: 
+        context: .
+        dockerfile: php.Dockerfile
+    image: php:7.4-apache
+    depends_on:
+            - db
+    volumes: 
+      - ./server:/var/www/html
+      - ./demo.apache.conf:/etc/apache2/sites-enabled/demo.conf
+    ports:
+      - 8000:80
+  db:
+    container_name: db
+    build: 
+        context: .
+        dockerfile: mysql.Dockerfile
+    image: mysql
+    restart: always
+    environment:
+        MYSQL_USER: aloeffler
+        MYSQL_PASSWORD: 123#@!
+        MYSQL_ROOT_PASSWORD: 123#@!
+        # MYSQL_DATABASE: contato_seguro_app
+    ports:
+        - "9906:3306"
+    volumes:
+       - ./db.sql:/docker-entrypoint-initdb.d/dump.sql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+        - '8080:80'
+    restart: always
+    environment:
+        PMA_HOST: db
+    depends_on:
+        - db

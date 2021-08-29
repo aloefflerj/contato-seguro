@@ -1,4 +1,4 @@
-<?php
+
 
 use DI\Container;
 use Slim\Factory\AppFactory;
