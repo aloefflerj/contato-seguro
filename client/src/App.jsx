@@ -12,7 +12,6 @@ class App extends Component {
         super(props)
         this.state = {
             users: [],
-            filteredUsers: []
         }
     }
 
@@ -26,7 +25,6 @@ class App extends Component {
         const usersResponse = (await res).data
         this.setState({
             users: usersResponse,
-            filteredUsers: usersResponse
         })
     }
 
@@ -47,7 +45,7 @@ class App extends Component {
             }
         })
         this.setState({
-            filteredUsers: users
+            users: users
         })
     }
 
@@ -70,7 +68,7 @@ class App extends Component {
                 <Content>
                     <UserTable
                         init={this.init}
-                        users={this.state.filteredUsers}
+                        users={this.state.users}
                         filter={this.filter}
                     />
                 </Content>
