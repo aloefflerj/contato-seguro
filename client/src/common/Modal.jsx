@@ -207,7 +207,6 @@ const ModalTemplate = props => {
                                         type='date'
                                         name='birth'
                                         id='birth'
-                                        color='pimary'
                                         value={user.birth}
                                         onChange={handleChange}
                                     />
@@ -223,7 +222,6 @@ const ModalTemplate = props => {
                                 type='text'
                                 name='city'
                                 id='city'
-                                color='light'
                                 value={user.city}
                                 onChange={handleChange}
                             />
