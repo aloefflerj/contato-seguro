@@ -14,7 +14,7 @@ class App extends Component {
             users: [],
         }
     }
-
+    
     async componentDidMount() {
         await this.init()
     }
@@ -50,7 +50,7 @@ class App extends Component {
     }
 
     normalizeString(str) {
-        const lowerCase = str.toLowerCase()
+        const lowerCase = str ? str.toLowerCase() : ''
         const parsed = lowerCase.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
         return parsed
     }
@@ -58,6 +58,7 @@ class App extends Component {
     render() {
         return (
             <div className='App'>
+                
                 <Header>
                     <UpperOptions
                         init={this.init}

@@ -2,42 +2,36 @@
 
 use DI\Container;
 use Slim\Factory\AppFactory;
-use Source\App\Middlewares\JsonMiddleware;
 use Source\App\Controllers\Users;
 use Slim\Routing\RouteCollectorProxy;
 use Source\App\Controllers\Web;
+use Source\App\Middlewares\JsonMiddleware;
 use Source\App\Middlewares\RestApi;
 
 require __DIR__ . '/../vendor/autoload.php';
 
 
-//Container adicionado para invocar as funcionalidades das rotas em uma classe separada
+//Container adicionado para invocar as funcionalidades das rotas em uma classe separada ------------>
 $container = new Container();
 AppFactory::setContainer($container);
 
+//Create
 $app = AppFactory::create();
 
-
+//Middlewares -------------------------------------------------------------------------------------->
 $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();
 $errorMiddleWare = $app->addErrorMiddleware(true, true, true);
-// $app->addMiddleware(new JsonMiddleware());
+$app->add(new JsonMiddleware());
+$app->add(new RestApi());
 
+//Rotas controlador Source\App\Controllers\Web()  -------------------------------------------------->
 $app->get('/', Web::class . ':home')->add(new RestApi);
 $app->post('/', Web::class . ':create')->add(new RestApi);
 
-// $app->post('/', function (ServerRequestInterface $request, $response) {
-//     $formDataArry = $request->getParsedBody();
-//     $response->getBody()->write('<pre>', var_dump($formDataArry), '</pre>');
-//  });
-// $app->add(new JsonMiddleware());
-//Rotas do controlador 'Users'
-$app->group('/v1/users', function (RouteCollectorProxy $group) {
 
-    header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Headers: Authorization,Origin,X-Requested-With,Content-Type,Range");
-    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-    // header("Content-Type: application/json");
+//Rotas controlador Source\App\Controllers\Users()  ------------------------------------------------>
+$app->group('/v1/users', function (RouteCollectorProxy $group) {
 
     $group->get('', Users::class . ':get')->setName('get');
     $group->post('', Users::class . ':newUser')->setName('newUser');
@@ -45,13 +39,8 @@ $app->group('/v1/users', function (RouteCollectorProxy $group) {
     $group->get('/{id}', Users::class . ':getUser')->setName('getUser');
     $group->delete('/{id}', Users::class . ':deleteUser')->setName('deleteUser');
     $group->put('/{id}', Users::class . ':updateUser')->setName('updateUser');
-    // $group->patch('/{id}', Users::class . ':updateUserData')->setName('updateUserData');
 
-    $group->group('/group', function (RouteCollectorProxy $group) {
-        $group->get('/{field}', Users::class . ':groupUsers')->setName('groupUsers');
-        $group->get('/{field}/{value}', Users::class . ':groupUsersBy')->setName('groupUsersBy');
-    });
-})->add(new JsonMiddleware());
+});
 
-
+//Dispatch ----------------------------------------------------------------------------------------->
 $app->run();

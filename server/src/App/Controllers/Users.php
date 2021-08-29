@@ -50,29 +50,20 @@ class Users
 
     public function getUser(Request $request, Response $response, array $args): Response
     {
-        //Valida inteiro
-        $id = filter_var($args['id'], FILTER_VALIDATE_INT);
-        if (!$id) {
-            $response->getBody()->write(json_encode([
-                'message' => [
-                    'content' => 'Não é um valor inteiro válido',
-                    'type' => 'error'
-                ]
-            ]));
+        //Validações ------------------------------------------------------------>
+        $validate = $this->users->validateId($args['id']);
+        if (!$validate) {
+            $response->getBody()->write($this->users->fail()->getMessage());
             return $response;
         }
 
-        $user = $this->users->findById($id);
+        $user = $this->users->userExists($args['id']);
         if (!$user) {
-            $response->getBody()->write(json_encode([
-                'message' => [
-                    'content' => 'Usuário não encontrado',
-                    'type' => 'error',
-                ]
-            ]));
+            $response->getBody()->write($this->users->fail()->getMessage());
             return $response;
         }
 
+        //Resposta ------------------------------------------------------------>
         $response->getBody()->write($this->modelToJson($user));
         return $response;
     }
@@ -82,22 +73,6 @@ class Users
         $body = $request->getParsedBody();
         $body = filter_var_array($body, FILTER_DEFAULT);
 
-        //Campos vazios para mensagem de erro
-        $fields = [
-            'name' => empty($body['name']) ?? false,
-            'mail' => empty($body['mail']) ?? false
-        ];
-        if (empty($body['name']) || empty($body['mail'])) {
-
-            $response->getBody()->write(json_encode([
-                'message' => [
-                    'content' => 'Por favor, preencha este campo',
-                    'type' => 'alert',
-                    'fields' => $fields
-                ]
-            ]));
-            return $response;
-        }
         $user = $this->users->register(
             $body['name'],
             $body['mail'],
@@ -105,51 +80,28 @@ class Users
             $body['birth'],
             $body['city'],
         );
+
+        //Validação ------------------------------------------------------------>
         if (!$this->users->save()) {
-            $response->getBody()->write(
-                json_encode([
-                    'message' => [
-                        'content' => $this->users->fail()->getMessage(),
-                        'type' => 'error',
-                        'fields' => ['name' => false, 'mail' => false]
-                    ]
-                ])
-            );
+            $response->getBody()->write($this->users->fail()->getMessage());
             return $response;
         }
 
+        //Resposta ------------------------------------------------------------>
         $response->getBody()->write($user->fetchJson());
         return $response;
     }
 
     public function deleteUser(Request $request, Response $response, array $args): Response
     {
-        $id = filter_var($args['id'], FILTER_VALIDATE_INT);
-        if (!$id) {
-            $response->getBody()->write(json_encode([
-                'message' => [
-                    'content' => 'Não é um valor inteiro válido',
-                    'type' => 'error',
-                    'fields' => ['name' => false, 'mail' => false]
-                ]
-            ]));
+
+        //Validação ------------------------------------------------------------>
+        if (!$this->users->unregister($args['id'])) {
+            $response->getBody()->write($this->users->fail()->getMessage());
             return $response;
         }
 
-        $user = $this->users->findById($id);
-        if (!$user) {
-            $response->getBody()->write(json_encode([
-                'message' => [
-                    'content' => 'Usuário não encontrado',
-                    'type' => 'error',
-                    'fields' => ['name' => false, 'mail' => false]
-                ]
-            ]));
-            return $response;
-        }
-
-        $user->destroy();
-
+        //Resposta ------------------------------------------------------------>
         $users = $this->users->find()->fetch(true, true);
         $response->getBody()->write($users);
         return $response;
@@ -157,91 +109,24 @@ class Users
 
     public function updateUser(ServerRequest $request, Response $response, array $args): Response
     {
-        $id = filter_var($args['id'], FILTER_VALIDATE_INT);
-        if (!$id) {
-            $response->getBody()->write(json_encode([
-                'message' => [
-                    'content' => 'Não é um valor inteiro válido',
-                    'type' => 'error',
-                    'fields' => ['name' => false, 'mail' => false]
-                ]
-            ]));
-            return $response;
-        }
-
-        $user = $this->users->findById($id);
-        if (!$user) {
-            $response->getBody()->write(json_encode([
-                'message' => [
-                    'content' => 'Usuário não encontrado',
-                    'type' => 'error',
-                    'fields' => ['name' => false, 'mail' => false]
-                ]
-            ]));
-            return $response;
-        }
-
+        //Pegando dados do corpo da requisição ------------------------------------->
         $body = json_decode(file_get_contents('php://input'), true);
         $body = $request->withParsedBody($body)->getParsedBody();
 
-        //Resposta de campos vazios
-        $fields = [
-            'name' => empty($body['name']) ?? false,
-            'mail' => empty($body['mail']) ?? false
-        ];
-        if (empty($body['name']) || empty($body['mail'])) {
-
-            $response->getBody()->write(json_encode([
-                'message' => [
-                    'content' => 'Por favor, preencha este campo',
-                    'type' => 'alert',
-                    'fields' => $fields
-                ]
-            ]));
+        //Validações ------------------------------------------------------------>
+        $user = $this->users->updateRegister($args['id'], $body['name'], $body['mail'], $body['phone'], $body['birth'], $body['city']);
+        if (!$user) {
+            $response->getBody()->write($this->users->fail()->getMessage());
             return $response;
         }
 
-        $user->name     = $body['name'];
-        $user->mail     = $body['mail'];
-        $user->phone    = $body['phone'] ?? null;
-        $user->birth    = $body['birth'] ?? null;
-        $user->city     = $body['city'] ?? null;
-        $user->save();
         if (!$user->save()) {
-            $response->getBody()->write(json_encode([
-                'message' => [
-                    'content' => $user->fail()->getMessage(),
-                    'type' => 'error',
-                    'fields' => $fields
-                ]
-            ]));
+            $response->getBody()->write($user->fail()->getMessage());
             return $response;
         }
 
-
+        //Resposta ------------------------------------------------------------>
         $response->getBody()->write($this->modelToJson($user));
-        return $response;
-    }
-
-    // public function updateUserData(ServerRequest $request, Response $response): Response
-    // {
-    //     $response->getBody()->write(json_encode(["update user data"]));
-    //     return $response;
-    // }
-
-    public function groupUsers(Request $request, Response $response, array $args): Response
-    {
-        $field = filter_var($args['field'], FILTER_SANITIZE_STRIPPED);
-
-        $users = $this->users->find()->group($field)->fetch(true, true);
-
-        $response->getBody()->write($users);
-        return $response;
-    }
-
-    public function groupUsersBy(Request $request, Response $response): Response
-    {
-        $response->getBody()->write(json_encode(["group users by"]));
         return $response;
     }
 }

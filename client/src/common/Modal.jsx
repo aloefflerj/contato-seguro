@@ -6,14 +6,10 @@ import {
     ModalHeader,
     ModalBody,
     Form,
-    FormGroup,
-    Label,
-    Input,
-    FormFeedback,
-    FormText,
     Row,
     Col,
 } from 'reactstrap'
+import FormItem from './FormItem'
 
 import { newUser, updateUser } from '../routes/routes'
 
@@ -145,90 +141,59 @@ const ModalTemplate = props => {
                     <strong>{title}</strong>
                 </ModalHeader>
                 <ModalBody>
-                    <Form method={method} action={action}>
-                        <FormGroup>
-                            <Label for='name'>Nome:</Label>
-                            <Input
-                                invalid={error.message.fields.name}
-                                type='text'
-                                name='name'
-                                id='name'
-                                required
-                                value={user.name}
-                                onChange={handleChange}
+                    <Form>
+                        <FormItem
+                            name='name'
+                            label='Nome:'
+                            value={user.name}
+                            action={handleChange}
+                            invalid={error.message.fields.name ?? ''}
+                            required={'Obrigatório'}
+                            feedBack={
+                                error.message.fields.name
+                                ? error.message.content
+                                : ''
+                            }
                             />
-                            <FormFeedback>
-                                {error.message.fields.name
+                        <FormItem
+                            name='mail'
+                            label='Email:'
+                            value={user.mail ?? ''}
+                            action={handleChange}
+                            invalid={error.message.fields.mail ?? ''}
+                            required={'Obrigatório'}
+                            feedBack={
+                                error.message.fields.mail
                                     ? error.message.content
-                                    : ''}
-                            </FormFeedback>
-                            <FormText>Obrigatório</FormText>
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for='mail'>E-mail:</Label>
-                            <Input
-                                invalid={error.message.fields.mail}
-                                type='text'
-                                name='mail'
-                                id='mail'
-                                required
-                                value={user.mail}
-                                onChange={handleChange}
-                            />
-                            <FormFeedback invalid={true}>
-                                {error.message.fields.mail
-                                    ? error.message.content
-                                    : ''}
-                            </FormFeedback>
-                            <FormText>Obrigatório</FormText>
-                        </FormGroup>
+                                    : ''
+                            }
+                        />
                         <Row>
                             <Col md={6}>
-                                <FormGroup>
-                                    <Label for='phone'>Telefone:</Label>
-                                    <Input
-                                        type='phone'
-                                        name='phone'
-                                        id='phone'
-                                        value={user.phone}
-                                        onChange={handleChange}
-                                    />
-                                    <FormFeedback>
-                                        {/* colocar resposta de json errado aqui */}
-                                    </FormFeedback>
-                                </FormGroup>
+                                <FormItem 
+                                    type='phone'
+                                    name='phone'
+                                    label='Telefone:'
+                                    value={user.phone ?? ''}
+                                    action={handleChange}
+                                />
                             </Col>
                             <Col md={6}>
-                                <FormGroup>
-                                    <Label for='birth'>
-                                        Data de nascimento:
-                                    </Label>
-                                    <Input
-                                        type='date'
-                                        name='birth'
-                                        id='birth'
-                                        value={user.birth}
-                                        onChange={handleChange}
-                                    />
-                                    <FormFeedback>
-                                        {/* colocar resposta de json errado aqui */}
-                                    </FormFeedback>
-                                </FormGroup>
+                                <FormItem
+                                    type='date'
+                                    name='birth'
+                                    label='Data de nascimento:'
+                                    value={user.birth ?? ''}
+                                    action={handleChange}
+                                />
                             </Col>
                         </Row>
-                        <FormGroup>
-                            <Label for='city'>Cidade onde nasceu:</Label>
-                            <Input
-                                type='text'
-                                name='city'
-                                id='city'
-                                value={user.city}
-                                onChange={handleChange}
-                            />
-                            <FormFeedback>
-                                {/* colocar resposta de json errado aqui */}
-                            </FormFeedback>
-                        </FormGroup>
+                        <FormItem
+                            name='city'
+                            label='Cidade onde nasceu:'
+                            value={user.city ?? ''}
+                            action={handleChange}
+                        />
                         <Alert
                             color='danger'
                             isOpen={
