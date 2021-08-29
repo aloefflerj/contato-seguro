@@ -37,6 +37,7 @@ services:
     volumes: 
       - ./server:/var/www/html
       - ./demo.apache.conf:/etc/apache2/sites-enabled/demo.conf
+      - ./Config.php:/var/www/html/src/config/Config.php
     ports:
       - 8000:80
   db:
