@@ -2,7 +2,7 @@
 
 ### Mysql
 - Após baixar o projeto, inicie o mysql e carregue o bando de dados db.sql da raiz do projeto para seu banco
-> Na pasta raiz execute `mysql -uroot < db.sql`
+> Por exemplo, na pasta raiz execute `mysql -uroot < db.sql` ou importe através de alguma ferramenta
 
 ### PHP
 - Entre na pasta **server** e rode o `composer update`
