@@ -46,7 +46,7 @@ _Responda aqui quais foram suas dificuldades e explique a sua solução_
 
 ## PHP
 - Tive um pouco de dificuldade ao utilizar o framework slim quanto aos middlewares, de início coloquei no index
-os middlewares como header('Content-Type: application/json') por exemplo, mas depois refatorei para fazer funcionar.
+os middlewares como `header('Content-Type: application/json')` por exemplo, mas depois refatorei para fazer funcionar.
 Preferi deixar acesso do CORS para todos para evitar algum erro
 - Ia pegar os dados por um arquivo .env, mas não deu tempo
 
