@@ -9,6 +9,8 @@
 - Abrir no **localhost:3000**
 - Para teste, pode-se abrir o **localhost:8000/v1/users**, o retorno é um json dos usuários
 
+> Caso os passos acima não funcionem, siga o passo a passo abaixo
+
 ## Rodar em PHP-Server + React
 
 ### Mysql
