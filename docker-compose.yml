@@ -65,3 +65,14 @@ services:
         PMA_HOST: db
     depends_on:
         - db
+  react-ui:
+    build:
+      context: .
+      dockerfile: react.Dockerfile
+    ports:
+      - "3000:3000"
+    container_name: react-ui
+    stdin_open: true
+    volumes:
+       - ./client:/usr/app
+       - /usr/app/node_modules
