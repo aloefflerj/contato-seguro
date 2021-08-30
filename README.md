@@ -36,6 +36,8 @@ Você deve utilizar um banco de dados. Pedimos para que nos sinalize com suas op
 
 # Resposta do participante
 
+_Responda aqui quais foram suas dificuldades e explique a sua solução_
+
 **As instruções para rodar o projeto estão no arquivo Instrucoes.md na pasta raiz**
 
 Caso não consigam rodar:
@@ -44,8 +46,6 @@ e
 **[Aqui o link da listagem de usuários no backend](http://contato-api.andersonjobloeffler.com/v1/users)**
 
 - **As instruções para rodar o projeto estão no arquivo Instrucoes.md na pasta raiz**
-
-_Responda aqui quais foram suas dificuldades e explique a sua solução_
 
 ## Layout
 - Mudei o ícone de deletar de uma borracha para uma lixeira pois julguei que fosse mais fácil para o usuário entender
