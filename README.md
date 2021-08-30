@@ -45,20 +45,20 @@ _Responda aqui quais foram suas dificuldades e explique a sua solução_
 - Arredondei a parte principal para ficar com o border-radius igual ao do modal de inserção/edição
 
 ## PHP
-- Tive um pouco de dificuldade ao utilizar o framework slim quanto aos middlewares, de início coloquei no index
+- Tive um pouco de dificuldade ao utilizar o _slim framework_ quanto aos middlewares, de início coloquei no index
 os middlewares como `header('Content-Type: application/json')` por exemplo, mas depois refatorei para fazer funcionar.
-Preferi deixar acesso do CORS para todos para evitar algum erro
-- Ia pegar os dados por um arquivo .env, mas não deu tempo
+Preferi deixar acesso do _CORS_ para todos para evitar algum erro
+- Ia pegar os dados por um arquivo _.env_, mas não deu tempo
 
 ## React
 - Tive mais dificuldade pois ainda não estou tão acostumado com a biblioteca
 - A parte que achei mais complicada foi o gerenciamento de estado, quando vi que não conseguia passar coisas de um certo
-componente para o outro, coloquei o que eu precisava no componente `<App>` e fui passando para os filhos
-- Tive uns problemas com o axios para puxar os dados de certos verbos da api (*put* e *post* principalmente), porém, acabei descobrindo que muitos erros davam-se devido aos middlewares do slim framework
-- Julgo que o código da busca acabou ficando ruim (o método `map` está dando um alerta no console pois não tem retorno), achei complicado buscar filtrando pelos campos, gostaria de poder refatorá-lo
-- Existe, ainda, outro alerta no console relacionado aos *states* de alguns componentes, gostaria de poder arrumar também, mas não deu tempo
+componente para o outro, coloquei o que eu precisava no componente _<App>_ e fui passando para os filhos
+- Tive uns problemas com o _axios_ para puxar os dados de certos verbos da api (_put_ e _post_ principalmente), porém, acabei descobrindo que muitos erros davam-se devido aos middlewares do slim framework
+- Julgo que o código de pesquisa de usuários acabou ficando ruim (o método `map` está dando um alerta no console pois não tem retorno), achei complicado buscar filtrando pelos campos, gostaria de poder refatorá-lo
+- Existe, ainda, outro alerta no console relacionado aos _states_ de alguns componentes, gostaria de poder arrumar também, mas não deu tempo
 
 ## Docker
 - Tive bastante dificuldade pois nunca havia mexido, testei diversas vezes e espero que consigam rodar
-- Os meus maiores problemas foram com as imagens do apache e do mysql. Quanto ao apache eu só queria expor a pasta */public*, e a única coisa que consegui achar foi um comando pronto no Stack Overflow para conseguir fazer isso. Quanto ao mysql houve um erro na inicialização da imagem que não soube resolver, apenas depois de remover as imagens e containers tive sucesso
+- Os meus maiores problemas foram com as imagens do _apache_ e do _mysql_. Quanto ao apache eu só queria expor a pasta _/public_, e a única coisa que consegui achar foi um comando pronto no Stack Overflow para conseguir fazer isso. Quanto ao mysql houve um erro na inicialização da imagem que não soube resolver, apenas depois de remover as imagens e containers tive sucesso
 - Ainda não sei quase nada sobre, o que eu fiz foi apenas pesquisar e testar
