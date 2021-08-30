@@ -40,6 +40,7 @@ Você deve utilizar um banco de dados. Pedimos para que nos sinalize com suas op
 
 Caso não consigam rodar:
 **[Aqui está o projeto na minha hospedagem](http://contato.andersonjobloeffler.com/)**
+e
 **[Aqui o link da listagem de usuários no backend](http://contato-api.andersonjobloeffler.com/v1/users)**
 
 - **As instruções para rodar o projeto estão no arquivo Instrucoes.md na pasta raiz**
