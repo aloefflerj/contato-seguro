@@ -42,10 +42,10 @@ Você deve utilizar um banco de dados. Pedimos para que nos sinalize com suas op
 
 **As instruções para rodar o projeto estão no arquivo [Instrucoes.md](https://github.com/aloefflerj/contato-seguro/blob/main/INSTRUCOES.md) na pasta raiz**
 
-Caso não consigam rodar:
-**[Aqui está o projeto na minha hospedagem](http://contato.andersonjobloeffler.com/)**
-e
-**[Aqui o link da listagem de usuários na api de backend](http://contato-api.andersonjobloeffler.com/v1/users)**
+Caso não consigam rodar a aplicação:
+
+**[Aqui está o projeto hospedado](http://contato.andersonjobloeffler.com/)**
+> Só pedir a senha que eu libero
 
 - **As instruções para rodar o projeto estão no arquivo Instrucoes.md na pasta raiz**
 
