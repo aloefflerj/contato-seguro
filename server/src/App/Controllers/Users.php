@@ -74,11 +74,11 @@ class Users
         $body = filter_var_array($body, FILTER_DEFAULT);
 
         $user = $this->users->register(
-            $body['name'],
-            $body['mail'],
-            $body['phone'],
-            $body['birth'],
-            $body['city'],
+            $body['name'] ?? null,
+            $body['mail'] ?? null,
+            $body['phone'] ?? null,
+            $body['birth'] ?? null,
+            $body['city'] ?? null,
         );
 
         //Validação ------------------------------------------------------------>
