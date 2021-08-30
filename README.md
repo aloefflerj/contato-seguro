@@ -35,6 +35,8 @@ Você deve utilizar um banco de dados. Pedimos para que nos sinalize com suas op
 - Outras entidades e relacionamento entre entidades. Por exemplo: um objeto `Empresa` que tenha as `Pessoa`s vinculadas à empresa ou relacionamento entre sí das pessoas, sugerindo um vínculo familiar.
 
 # Resposta do participante
-_Responda aqui quais foram suas dificuldades e explique a sua solução_
 
+- As instruções para rodar o projeto estão no arquivo Instrucoes.md na pasta raiz
+
+_Responda aqui quais foram suas dificuldades e explique a sua solução_
 - Mudei o ícone de deletar de uma borracha para uma lixeira pois julguei mais claro
